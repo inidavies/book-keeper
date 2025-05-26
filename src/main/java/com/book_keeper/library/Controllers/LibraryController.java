@@ -32,5 +32,15 @@ public class LibraryController {
         return bookRepository.save(book);
     }
 
+    @GetMapping("/book")
+    public List<Book> findBook(@RequestParam String searchTerm){
+        return bookRepository.findByTitle(searchTerm);
+    }
+
+    @DeleteMapping("/books")
+    public void deleteBook(@RequestParam String id){
+        bookRepository.deleteById(id);
+    }
+
 
 }
