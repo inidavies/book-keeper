@@ -2,6 +2,7 @@ package com.book_keeper.library.Controllers;
 
 import com.book_keeper.library.Model.Book;
 import com.book_keeper.library.Repositories.BookRepository;
+import com.book_keeper.library.Repositories.SearchRepository;
 import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.Getter;
@@ -16,6 +17,9 @@ public class LibraryController {
 
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    SearchRepository searchRepository;
 
     @RequestMapping(value="/")
     public void redirect(HttpServletResponse response) throws IOException {
@@ -34,7 +38,7 @@ public class LibraryController {
 
     @GetMapping("/book")
     public List<Book> findBook(@RequestParam String searchTerm){
-        return bookRepository.findByTitle(searchTerm);
+        return searchRepository.findBySearchTerm(searchTerm);
     }
 
     @DeleteMapping("/books")
