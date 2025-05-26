@@ -72,11 +72,11 @@ public class Book {
         this.publishers = publishers;
     }
 
-    public int getPublishDate() {
+    public String getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(int publishDate) {
+    public void setPublishDate(String publishDate) {
         this.publishDate = publishDate;
     }
 
