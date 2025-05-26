@@ -4,10 +4,9 @@ import com.book_keeper.library.Model.Book;
 import com.book_keeper.library.Repositories.BookRepository;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,8 +23,14 @@ public class LibraryController {
     }
 
     @GetMapping("/books")
-    public List<Book> books(){
+    public List<Book> getBooks(){
         return bookRepository.findAll();
     }
+
+    @PostMapping("/books")
+    public Book addBook(@RequestBody Book book){
+        return bookRepository.save(book);
+    }
+
 
 }
