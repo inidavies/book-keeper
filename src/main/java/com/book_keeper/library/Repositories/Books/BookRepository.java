@@ -1,4 +1,4 @@
-package com.book_keeper.library.Repositories;
+package com.book_keeper.library.Repositories.Books;
 
 import com.book_keeper.library.Model.Book;
 import org.springframework.data.mongodb.repository.MongoRepository;

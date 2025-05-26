@@ -1,9 +1,9 @@
-package com.book_keeper.library.Repositories;
+package com.book_keeper.library.Repositories.Books;
 
 import com.book_keeper.library.Model.Book;
+import com.book_keeper.library.Repositories.Books.SearchBooksRepository;
 import com.mongodb.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import org.bson.Document;
 import com.mongodb.client.AggregateIterable;
 
 @Component
-public class SearchRepositoryImpl implements SearchRepository {
+public class SearchBooksRepositoryImpl implements SearchBooksRepository {
 
     @Autowired
     MongoClient mongoClient;

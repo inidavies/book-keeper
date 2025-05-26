@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,15 +15,16 @@ import java.util.Date;
 public class Book {
     @Id
     private String _id;
-    private int isbn;
+    private String isbn;
     private String title;
-    private String[] authors;
+    private List<String> authors;
     private int pages;
-    private String[] publishers;
+    private List<String> publishers;
     private String publishDate;
-    private String[] genres;
+    private List<String> genres;
     private Date dateAcquired = new Date();
     private String notes;
+    private CoverLinks coverLinks;
 
     public String get_id() {
         return _id;
@@ -32,11 +34,11 @@ public class Book {
         this._id = _id;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -48,11 +50,11 @@ public class Book {
         this.title = title;
     }
 
-    public String[] getAuthors() {
+    public List<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(String[] authors) {
+    public void setAuthors(List<String> authors) {
         this.authors = authors;
     }
 
@@ -64,11 +66,11 @@ public class Book {
         this.pages = pages;
     }
 
-    public String[] getPublishers() {
+    public List<String> getPublishers() {
         return publishers;
     }
 
-    public void setPublishers(String[] publishers) {
+    public void setPublishers(List<String> publishers) {
         this.publishers = publishers;
     }
 
@@ -80,11 +82,11 @@ public class Book {
         this.publishDate = publishDate;
     }
 
-    public String[] getGenres() {
+    public List<String> etGenres() {
         return genres;
     }
 
-    public void setGenres(String[] genres) {
+    public void setGenres(List<String> genres) {
         this.genres = genres;
     }
 
@@ -96,18 +98,39 @@ public class Book {
         this.dateAcquired = dateAcquired;
     }
 
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public CoverLinks getCoverLinks() {
+        return coverLinks;
+    }
+
+    public void setCoverLinks(CoverLinks coverLinks) {
+        this.coverLinks = coverLinks;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
                 "_id='" + _id + '\'' +
-                ", isbn=" + isbn +
+                ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
-                ", authors=" + Arrays.toString(authors) +
+                ", authors=" + authors +
                 ", pages=" + pages +
-                ", publishers=" + Arrays.toString(publishers) +
-                ", publishDate=" + publishDate +
-                ", genres=" + Arrays.toString(genres) +
+                ", publishers=" + publishers +
+                ", publishDate='" + publishDate + '\'' +
+                ", genres=" + genres +
                 ", dateAcquired=" + dateAcquired +
+                ", notes='" + notes + '\'' +
                 '}';
     }
 }
