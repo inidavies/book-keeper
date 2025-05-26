@@ -1,16 +1,14 @@
 package com.book_keeper.library.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import nonapi.io.github.classgraph.json.Id;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Arrays;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection ="books")
 public class Book {
@@ -18,32 +16,18 @@ public class Book {
     private String _id;
     private int isbn;
     private String title;
-    private String[] author;
-    private String[] publisher;
-    private String description;
-    private String[] categories;
-    private Date dateAcquired;
-
-    public Book() {
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "_id=" + _id +
-                ", isbn=" + isbn +
-                ", title='" + title + '\'' +
-                ", author=" + Arrays.toString(author) +
-                ", publisher=" + Arrays.toString(publisher) +
-                ", description='" + description + '\'' +
-                ", categories=" + Arrays.toString(categories) +
-                ", dateAcquired=" + dateAcquired +
-                '}';
-    }
+    private String[] authors;
+    private int pages;
+    private String[] publishers;
+    private String publishDate;
+    private String[] genres;
+    private Date dateAcquired = new Date();
+    private String notes;
 
     public String get_id() {
         return _id;
     }
+
     public void set_id(String _id) {
         this._id = _id;
     }
@@ -64,36 +48,44 @@ public class Book {
         this.title = title;
     }
 
-    public String[] getPublisher() {
-        return publisher;
+    public String[] getAuthors() {
+        return authors;
     }
 
-    public void setPublisher(String[] publisher) {
-        this.publisher = publisher;
+    public void setAuthors(String[] authors) {
+        this.authors = authors;
     }
 
-    public String[] getAuthor() {
-        return author;
+    public int getPages() {
+        return pages;
     }
 
-    public void setAuthor(String[] author) {
-        this.author = author;
+    public void setPages(int pages) {
+        this.pages = pages;
     }
 
-    public String getDescription() {
-        return description;
+    public String[] getPublishers() {
+        return publishers;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPublishers(String[] publishers) {
+        this.publishers = publishers;
     }
 
-    public String[] getCategories() {
-        return categories;
+    public int getPublishDate() {
+        return publishDate;
     }
 
-    public void setCategories(String[] categories) {
-        this.categories = categories;
+    public void setPublishDate(int publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String[] getGenres() {
+        return genres;
+    }
+
+    public void setGenres(String[] genres) {
+        this.genres = genres;
     }
 
     public Date getDateAcquired() {
@@ -104,4 +96,18 @@ public class Book {
         this.dateAcquired = dateAcquired;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "_id='" + _id + '\'' +
+                ", isbn=" + isbn +
+                ", title='" + title + '\'' +
+                ", authors=" + Arrays.toString(authors) +
+                ", pages=" + pages +
+                ", publishers=" + Arrays.toString(publishers) +
+                ", publishDate=" + publishDate +
+                ", genres=" + Arrays.toString(genres) +
+                ", dateAcquired=" + dateAcquired +
+                '}';
+    }
 }
