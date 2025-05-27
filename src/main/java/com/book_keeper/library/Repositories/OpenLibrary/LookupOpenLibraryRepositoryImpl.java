@@ -2,9 +2,11 @@ package com.book_keeper.library.Repositories.OpenLibrary;
 
 import com.book_keeper.library.Model.Book;
 import com.book_keeper.library.Model.CoverLinks;
+import com.book_keeper.library.Repositories.Books.BookRepository;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Component
 public class LookupOpenLibraryRepositoryImpl implements LookupOpenLibraryRepository {
@@ -24,22 +27,42 @@ public class LookupOpenLibraryRepositoryImpl implements LookupOpenLibraryReposit
     @Value("${openlibrary.search.isbnUrl}")
     private String isbnUrl;
 
+    @Autowired
+    BookRepository bookRepository;
+
+    private static final Logger logger = Logger.getLogger(LookupOpenLibraryRepository.class.getName());
+
+
     public List<Book> lookupByIsbn(Set<String> isbns) throws URISyntaxException, IOException, InterruptedException {
+
+
         List<Book> books = new ArrayList<>();
         for (String isbn : isbns) {
-            URI uri = new URI(isbnUrl + isbn + ".json");
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(uri)
-                    .header("Accept", "application/json")
-                    .GET()
-                    .build();
+            // check if the isbn is already in library
+            List<Book> bookInDB = bookInDB(isbn);
 
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            String responseBody = response.body();
+            // look it up and add to library if not
+            if (bookInDB.isEmpty()){
+                URI uri = new URI(isbnUrl + isbn + ".json");
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(uri)
+                        .header("Accept", "application/json")
+                        .GET()
+                        .build();
 
-            Book book = jsonToBook(isbn, responseBody);
-            books.add(book);
+                HttpClient httpClient = HttpClient.newHttpClient();
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                String responseBody = response.body();
+
+                Book book = jsonToBook(isbn, responseBody);
+                books.add(book);
+
+                logger.info(isbn + " was added to the database");
+            }else{
+                logger.info(isbn + " already exists in the database");
+                books.add(bookInDB.get(0));
+            }
+
         }
 
         return books;
@@ -104,9 +127,9 @@ public class LookupOpenLibraryRepositoryImpl implements LookupOpenLibraryReposit
     }
 
     private List<String> parseFieldData(JSONObject fieldData, String field){
-        final JSONArray fieldJSON = fieldData.getJSONArray(field);
         final List<String> results = new ArrayList<>();
         if (fieldData.has(field)){
+            final JSONArray fieldJSON = fieldData.getJSONArray(field);
             for (Object fieldContent : fieldJSON) {
                 if (fieldContent instanceof JSONObject) {
                     results.add(((JSONObject) fieldContent).getString("name"));
@@ -131,5 +154,10 @@ public class LookupOpenLibraryRepositoryImpl implements LookupOpenLibraryReposit
 
         return 0;
     }
+
+    private List<Book> bookInDB(String isbn){
+        return bookRepository.findByIsbn(isbn);
+    }
+
 
 }
