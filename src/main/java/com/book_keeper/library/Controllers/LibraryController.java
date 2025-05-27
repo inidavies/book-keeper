@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class LibraryController {
@@ -36,9 +38,13 @@ public class LibraryController {
     }
 
     @PostMapping("/books")
-    public Book addBook(@RequestParam String isbn) throws IOException, URISyntaxException, InterruptedException {
-        Book book = lookupOpenLibraryRepository.lookupByIsbn(isbn);
-        return bookRepository.save(book);
+    public List<Book> addBook(@RequestParam String isbn) throws IOException, URISyntaxException, InterruptedException {
+        Set<String> isbnList = new HashSet<>(List.of(isbn.split(",")));
+        List<Book> books = lookupOpenLibraryRepository.lookupByIsbn(isbnList);
+        for (Book book: books) {
+            bookRepository.save(book);
+        }
+        return books;
     }
 
     @GetMapping("/book")
