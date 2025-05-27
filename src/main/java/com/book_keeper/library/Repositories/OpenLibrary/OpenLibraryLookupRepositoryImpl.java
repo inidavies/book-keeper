@@ -19,42 +19,30 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
 @Component
 public class OpenLibraryLookupRepositoryImpl implements OpenLibraryLookupRepository {
 
-    @Value("${openlibrary.search.isbnUrl}")
-    private String isbnUrl;
-
     @Autowired
-    BookRepository bookRepository;
+    OpenLibraryLookupHelper openLibraryLookupHelper;
 
     private static final Logger logger = Logger.getLogger(OpenLibraryLookupRepository.class.getName());
 
 
-    public List<Book> lookupByIsbn(Set<String> isbns) throws URISyntaxException, IOException, InterruptedException {
+    public List<Book> lookupByIsbn(Set<String> isbns) throws OpenLibraryLookupException {
 
         List<Book> books = new ArrayList<>();
         for (String isbn : isbns) {
             // check if the isbn is already in library
-            List<Book> bookInDB = bookInDB(isbn);
+            List<Book> bookInDB = openLibraryLookupHelper.bookInDB(isbn);
 
             // look it up and add to library if not
             if (bookInDB.isEmpty()){
-                URI uri = new URI(isbnUrl + isbn + ".json");
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(uri)
-                        .header("Accept", "application/json")
-                        .GET()
-                        .build();
-
-                HttpClient httpClient = HttpClient.newHttpClient();
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                String responseBody = response.body();
-
                 try {
+                    String responseBody = openLibraryLookupHelper.requestIsbnFromOpenLibrary(isbn);
                     Book book = jsonToBook(isbn, responseBody);
                     books.add(book);
                     logger.info(isbn + " was added to the database");
@@ -137,7 +125,8 @@ public class OpenLibraryLookupRepositoryImpl implements OpenLibraryLookupReposit
         final List<String> results = new ArrayList<>();
         if (fieldData.has(field)){
             final JSONArray fieldJSON = fieldData.getJSONArray(field);
-            for (Object fieldContent : fieldJSON) {
+            for (int i = 0; i < fieldJSON.length(); i++) {
+                Object fieldContent = fieldJSON.get(i);
                 if (fieldContent instanceof JSONObject) {
                     results.add(((JSONObject) fieldContent).getString("name"));
                 }
@@ -161,10 +150,5 @@ public class OpenLibraryLookupRepositoryImpl implements OpenLibraryLookupReposit
 
         return 0;
     }
-
-    private List<Book> bookInDB(String isbn){
-        return bookRepository.findByIsbn(isbn);
-    }
-
 
 }

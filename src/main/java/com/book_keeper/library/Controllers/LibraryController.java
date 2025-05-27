@@ -3,6 +3,7 @@ package com.book_keeper.library.Controllers;
 import com.book_keeper.library.Model.Book;
 import com.book_keeper.library.Repositories.Books.BookRepository;
 import com.book_keeper.library.Repositories.Books.SearchBooksRepository;
+import com.book_keeper.library.Repositories.OpenLibrary.OpenLibraryLookupException;
 import com.book_keeper.library.Repositories.OpenLibrary.OpenLibraryLookupRepository;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -38,7 +39,7 @@ public class LibraryController {
     }
 
     @PostMapping("/books")
-    public List<Book> addBook(@RequestParam String isbn) throws IOException, URISyntaxException, InterruptedException {
+    public List<Book> addBook(@RequestParam String isbn) throws OpenLibraryLookupException, IOException, URISyntaxException, InterruptedException {
         Set<String> isbnList = new HashSet<>(List.of(isbn.split(",")));
         List<Book> books = lookupOpenLibraryRepository.lookupByIsbn(isbnList);
         for (Book book: books) {

@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface OpenLibraryLookupRepository {
-    List<Book> lookupByIsbn(Set<String> isbn) throws IOException, URISyntaxException, InterruptedException;
+    List<Book> lookupByIsbn(Set<String> isbn) throws IOException, URISyntaxException, InterruptedException, OpenLibraryLookupException;
 }
