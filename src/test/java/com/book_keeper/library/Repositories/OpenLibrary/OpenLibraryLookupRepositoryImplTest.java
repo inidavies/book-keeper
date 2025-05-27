@@ -24,14 +24,9 @@ class OpenLibraryLookupRepositoryImplTest {
     @Mock
     private OpenLibraryLookupHelper openLibraryLookupHelper;
 
-    @Mock
-    private BookRepository bookRepository;
-
     @InjectMocks
-    private OpenLibraryLookupRepositoryImpl OpenLibraryLookupRepositoryImpl;
+    private OpenLibraryLookupRepositoryImpl openLibraryLookupRepositoryImpl;
 
-    @Mock
-    private JSONArray jsonArray;
 
     @Test
     void givenValidIsbn_lookupByIsbn_thenGetABook() throws OpenLibraryLookupException, IOException, URISyntaxException, InterruptedException, JSONException {
@@ -84,7 +79,7 @@ class OpenLibraryLookupRepositoryImplTest {
         when(openLibraryLookupHelper.requestIsbnFromOpenLibrary(anyString())).thenReturn(requestBody);
         when(openLibraryLookupHelper.bookInDB(anyString())).thenReturn(new ArrayList<>());
 
-        List<Book> books = OpenLibraryLookupRepositoryImpl.lookupByIsbn(isbnList);
+        List<Book> books = openLibraryLookupRepositoryImpl.lookupByIsbn(isbnList);
         Book book = books.get(0);
 
         assert book.getIsbn().equals(expectedBooks.getIsbn());
