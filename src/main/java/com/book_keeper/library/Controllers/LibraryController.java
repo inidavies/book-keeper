@@ -3,7 +3,7 @@ package com.book_keeper.library.Controllers;
 import com.book_keeper.library.Model.Book;
 import com.book_keeper.library.Repositories.Books.BookRepository;
 import com.book_keeper.library.Repositories.Books.SearchBooksRepository;
-import com.book_keeper.library.Repositories.OpenLibrary.LookupOpenLibraryRepository;
+import com.book_keeper.library.Repositories.OpenLibrary.OpenLibraryLookupRepository;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class LibraryController {
     SearchBooksRepository searchRepository;
 
     @Autowired
-    LookupOpenLibraryRepository lookupOpenLibraryRepository;
+    OpenLibraryLookupRepository lookupOpenLibraryRepository;
 
     @RequestMapping(value="/")
     public void redirect(HttpServletResponse response) throws IOException {

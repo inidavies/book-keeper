@@ -7,6 +7,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
-public interface LookupOpenLibraryRepository {
+public interface OpenLibraryLookupRepository {
     List<Book> lookupByIsbn(Set<String> isbn) throws IOException, URISyntaxException, InterruptedException;
 }
