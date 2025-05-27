@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup jdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: cache maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: run tests
+        run: mvn test -no-transfer-progress
+
+      - name: build with maven
+        run: mvn clean package --no-transfer-progress
+
+      - name: upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/**.jar

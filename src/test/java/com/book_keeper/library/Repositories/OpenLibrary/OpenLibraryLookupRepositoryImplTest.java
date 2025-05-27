@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
-v simport static org.mockito.Mockito.when;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OpenLibraryLookupRepositoryImplTest {
