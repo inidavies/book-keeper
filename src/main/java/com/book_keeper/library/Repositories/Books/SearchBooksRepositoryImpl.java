@@ -31,7 +31,7 @@ public class SearchBooksRepositoryImpl implements SearchBooksRepository {
         AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
                         new Document("text",
                                 new Document("query", searchTerm)
-                                        .append("path", Arrays.asList("title", "author")))),
+                                        .append("path", Arrays.asList("isbn","title","author")))),
                         new Document("$sort",
                                 new Document("dateAcquired", 1L)),
                         new Document("$limit", 5L)));
